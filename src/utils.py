@@ -1,5 +1,6 @@
 import json
 import zipfile
+from datetime import datetime
 
 
 def load_zipfile():
@@ -35,3 +36,16 @@ def sort_operations():
     sorted_list_ = sorted(operations_list, key=lambda x: datetime.strptime(x['date'], '%Y-%m-%dT%H:%M:%S.%f'),
                           reverse=True)
     return sorted_list_
+
+
+def change_date(sort_operations_):
+    """
+    Меняет формат даты на формат ДД.ММ.ГГГГ.
+    Возвращает список с информацией о дате операции.
+    """
+    date_list = []
+    for item in sort_operations_:
+        date_data = datetime.strptime(item['date'], '%Y-%m-%dT%H:%M:%S.%f')
+        date = f'{date_data:%d.%m.%Y}'
+        date_list.append(date)
+    return date_list
