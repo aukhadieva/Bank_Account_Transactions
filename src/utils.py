@@ -106,3 +106,15 @@ def hide_from():
                 hide_number = ' '.join([split_count[0], count_numbers[0], stars1, stars2, stars3, count_numbers[4]])
                 hide_from_list.append(hide_number)
     return hide_from_list
+
+
+def return_to():
+    """Возвращает список с информацией номера карты/ счета получателя."""
+    list_to = []
+    for item in sort_operations():
+        try:
+            where = item["to"]
+            list_to.append(where)
+        except KeyError:
+            list_to.append('Данные отсутствуют')
+    return list_to
