@@ -49,3 +49,12 @@ def change_date(sort_operations_):
         date = f'{date_data:%d.%m.%Y}'
         date_list.append(date)
     return date_list
+
+
+def return_description():
+    """Возвращает список с описанием операции."""
+    descriptions_list = []
+    for item in sort_operations():
+        description = item["description"]
+        descriptions_list.append(description)
+    return descriptions_list
