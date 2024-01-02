@@ -58,3 +58,15 @@ def return_description():
         description = item["description"]
         descriptions_list.append(description)
     return descriptions_list
+
+
+def return_from():
+    """Возвращает список с информацией номера карты/ счета отправителя."""
+    list_from = []
+    for item in sort_operations():
+        try:
+            data_from = item["from"]
+            list_from.append(data_from)
+        except KeyError:
+            list_from.append('Данные отсутствуют')
+    return list_from
