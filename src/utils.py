@@ -154,3 +154,12 @@ def hide_to():
                 hide_number = ' '.join([split_count[0], count_numbers[0], stars1, stars2, stars3, count_numbers[4]])
                 hide_to_list.append(hide_number)
     return hide_to_list
+
+
+def return_amount():
+    """Возвращает список с информацией о сумме операции."""
+    amount_list_ = []
+    for item in sort_operations():
+        amount = item["operationAmount"]["amount"]
+        amount_list_.append(amount)
+    return amount_list_
