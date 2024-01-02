@@ -70,3 +70,39 @@ def return_from():
         except KeyError:
             list_from.append('Данные отсутствуют')
     return list_from
+
+
+def hide_from():
+    """Скрывает номер карты/ счета отправителя."""
+    hide_from_list = []
+    for item in return_from():
+        if item == 'Данные отсутствуют':
+            hide_from_list.append('Данные отсутствуют')
+        split_count = item.split(' ')
+        if len(split_count) == 3:
+            split_numb = [iter(split_count[2])] * 4
+            zip_numb = zip(*split_numb)
+            count_numbers = [''.join(i) for i in zip_numb]
+            stars1 = count_numbers[1][0:2] + "*" * (len(count_numbers[1]) - 2)
+            stars2 = count_numbers[2].replace(count_numbers[2], '****')
+            hide_number = ' '.join([split_count[0], split_count[1], count_numbers[0], stars1, stars2, count_numbers[3]])
+            hide_from_list.append(hide_number)
+        if len(split_count) == 2:
+            if len(split_count[1]) == 16:
+                split_numb = [iter(split_count[1])] * 4
+                zip_numb = zip(*split_numb)
+                count_numbers = [''.join(i) for i in zip_numb]
+                stars1 = count_numbers[1][0:2] + "*" * (len(count_numbers[1]) - 2)
+                stars2 = count_numbers[2].replace(count_numbers[2], '****')
+                hide_number = ' '.join([split_count[0], count_numbers[0], stars1, stars2, count_numbers[3]])
+                hide_from_list.append(hide_number)
+            if len(split_count[1]) == 20:
+                split_numb = [iter(split_count[1])] * 4
+                zip_numb = zip(*split_numb)
+                count_numbers = [''.join(i) for i in zip_numb]
+                stars1 = count_numbers[1][0:2] + "*" * (len(count_numbers[1]) - 2)
+                stars2 = count_numbers[2].replace(count_numbers[2], '****')
+                stars3 = count_numbers[3].replace(count_numbers[3], '****')
+                hide_number = ' '.join([split_count[0], count_numbers[0], stars1, stars2, stars3, count_numbers[4]])
+                hide_from_list.append(hide_number)
+    return hide_from_list
