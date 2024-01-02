@@ -163,3 +163,12 @@ def return_amount():
         amount = item["operationAmount"]["amount"]
         amount_list_.append(amount)
     return amount_list_
+
+
+def return_name():
+    """Возвращает список с информацией о валюте операции."""
+    currency_list = []
+    for item in sort_operations():
+        amount = item["operationAmount"]["currency"]["name"]
+        currency_list.append(amount)
+    return currency_list
