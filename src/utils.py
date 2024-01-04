@@ -1,13 +1,19 @@
+import os
 import json
 import zipfile
+from config import ROOT
 from datetime import datetime
+
+
+ZIP_PATH = os.path.join(ROOT, 'src', 'operations.zip')
+JSON_PATH = os.path.join(ROOT, 'src', 'operations.json')
 
 
 def load_zipfile():
     """
     Распаковывает файл.
     """
-    with zipfile.ZipFile('/Users/dns/PycharmProjects/Bank_Account_Transactions/src/operations.zip') as zip_file:
+    with zipfile.ZipFile(ZIP_PATH) as zip_file:
         zip_file.extractall()
 
 
@@ -15,7 +21,7 @@ def load_operations():
     """
     Загружает операции в формате JSON и возвращает объекты Python.
     """
-    with open('/Users/dns/PycharmProjects/Bank_Account_Transactions/src/operations.json') as file:
+    with open(JSON_PATH) as file:
         operations = json.load(file)
         return operations
 
