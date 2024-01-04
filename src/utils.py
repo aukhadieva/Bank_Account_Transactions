@@ -1,5 +1,6 @@
 import os
 import json
+import re
 import zipfile
 from config import ROOT
 from datetime import datetime
@@ -41,16 +42,16 @@ def sort_operations():
             pass
     sorted_list_ = sorted(operations_list, key=lambda x: datetime.strptime(x['date'], '%Y-%m-%dT%H:%M:%S.%f'),
                           reverse=True)
-    return sorted_list_
+    return sorted_list_[0:5]
 
 
-def change_date(sort_operations_):
+def change_date():
     """
     Меняет формат даты на формат ДД.ММ.ГГГГ.
     Возвращает список с информацией о дате операции.
     """
     date_list = []
-    for item in sort_operations_:
+    for item in sort_operations():
         date_data = datetime.strptime(item['date'], '%Y-%m-%dT%H:%M:%S.%f')
         date = f'{date_data:%d.%m.%Y}'
         date_list.append(date)
@@ -86,31 +87,25 @@ def hide_from():
             hide_from_list.append('Данные отсутствуют')
         split_count = item.split(' ')
         if len(split_count) == 3:
-            split_numb = [iter(split_count[2])] * 4
-            zip_numb = zip(*split_numb)
-            count_numbers = [''.join(i) for i in zip_numb]
-            stars1 = count_numbers[1][0:2] + "*" * (len(count_numbers[1]) - 2)
-            stars2 = count_numbers[2].replace(count_numbers[2], '****')
-            hide_number = ' '.join([split_count[0], split_count[1], count_numbers[0], stars1, stars2, count_numbers[3]])
-            hide_from_list.append(hide_number)
+            split_numb = re.findall('....', split_count[2])
+            numb_stars = (split_count[0], split_count[1], split_numb[0], split_numb[1][0:2] + '**',
+                          split_numb[2].replace(split_numb[2], '****'), split_numb[3])
+            join_numb_stars = ' '.join(list(numb_stars))
+            hide_from_list.append(join_numb_stars)
         if len(split_count) == 2:
             if len(split_count[1]) == 16:
-                split_numb = [iter(split_count[1])] * 4
-                zip_numb = zip(*split_numb)
-                count_numbers = [''.join(i) for i in zip_numb]
-                stars1 = count_numbers[1][0:2] + "*" * (len(count_numbers[1]) - 2)
-                stars2 = count_numbers[2].replace(count_numbers[2], '****')
-                hide_number = ' '.join([split_count[0], count_numbers[0], stars1, stars2, count_numbers[3]])
-                hide_from_list.append(hide_number)
+                split_numb = re.findall('....', split_count[1])
+                numb_stars = (split_count[0], split_numb[0], split_numb[1][0:2] + '**',
+                              split_numb[2].replace(split_numb[2], '****'), split_numb[3])
+                join_numb_stars = ' '.join(list(numb_stars))
+                hide_from_list.append(join_numb_stars)
             if len(split_count[1]) == 20:
-                split_numb = [iter(split_count[1])] * 4
-                zip_numb = zip(*split_numb)
-                count_numbers = [''.join(i) for i in zip_numb]
-                stars1 = count_numbers[1][0:2] + "*" * (len(count_numbers[1]) - 2)
-                stars2 = count_numbers[2].replace(count_numbers[2], '****')
-                stars3 = count_numbers[3].replace(count_numbers[3], '****')
-                hide_number = ' '.join([split_count[0], count_numbers[0], stars1, stars2, stars3, count_numbers[4]])
-                hide_from_list.append(hide_number)
+                split_numb = re.findall('....', split_count[1])
+                numb_stars = (split_count[0], split_numb[0], split_numb[1][0:2] + '**',
+                              split_numb[2].replace(split_numb[2], '****'), split_numb[3].replace(split_numb[3], '****')
+                              , split_numb[4])
+                join_numb_stars = ' '.join(list(numb_stars))
+                hide_from_list.append(join_numb_stars)
     return hide_from_list
 
 
@@ -130,35 +125,11 @@ def hide_to():
     """Скрывает номер карты/ счета получателя."""
     hide_to_list = []
     for item in return_to():
-        if item == 'Данные отсутствуют':
-            hide_to_list.append('Данные отсутствуют')
         split_count = item.split(' ')
-        if len(split_count) == 3:
-            split_numb = [iter(split_count[2])] * 4
-            zip_numb = zip(*split_numb)
-            count_numbers = [''.join(i) for i in zip_numb]
-            stars1 = count_numbers[1][0:2] + "*" * (len(count_numbers[1]) - 2)
-            stars2 = count_numbers[2].replace(count_numbers[2], '****')
-            hide_number = ' '.join([split_count[0], split_count[1], count_numbers[0], stars1, stars2, count_numbers[3]])
-            hide_to_list.append(hide_number)
-        if len(split_count) == 2:
-            if len(split_count[1]) == 16:
-                split_numb = [iter(split_count[1])] * 4
-                zip_numb = zip(*split_numb)
-                count_numbers = [''.join(i) for i in zip_numb]
-                stars1 = count_numbers[1][0:2] + "*" * (len(count_numbers[1]) - 2)
-                stars2 = count_numbers[2].replace(count_numbers[2], '****')
-                hide_number = ' '.join([split_count[0], count_numbers[0], stars1, stars2, count_numbers[3]])
-                hide_to_list.append(hide_number)
-            if len(split_count[1]) == 20:
-                split_numb = [iter(split_count[1])] * 4
-                zip_numb = zip(*split_numb)
-                count_numbers = [''.join(i) for i in zip_numb]
-                stars1 = count_numbers[1][0:2] + "*" * (len(count_numbers[1]) - 2)
-                stars2 = count_numbers[2].replace(count_numbers[2], '****')
-                stars3 = count_numbers[3].replace(count_numbers[3], '****')
-                hide_number = ' '.join([split_count[0], count_numbers[0], stars1, stars2, stars3, count_numbers[4]])
-                hide_to_list.append(hide_number)
+        split_numb = re.findall('....', split_count[1])
+        numb_stars = split_count[0], split_numb[2].replace(split_numb[2], '**') + split_numb[4]
+        join_numb_stars = ' '.join(list(numb_stars))
+        hide_to_list.append(join_numb_stars)
     return hide_to_list
 
 
