@@ -41,7 +41,7 @@ def sort_operations():
         except KeyError:
             pass
     sorted_list_ = sorted(operations_list, key=lambda x: datetime.strptime(x['date'], '%Y-%m-%dT%H:%M:%S.%f'),
-                          reverse=True)
+                          reverse=True) # lambda список переменных-аргументов: возвращаемое значение
     return sorted_list_[0:5]
 
 
@@ -87,23 +87,22 @@ def hide_from():
             hide_from_list.append('Данные отсутствуют')
         split_count = item.split(' ')
         if len(split_count) == 3:
-            split_numb = re.findall('....', split_count[2])
-            numb_stars = (split_count[0], split_count[1], split_numb[0], split_numb[1][0:2] + '**',
-                          split_numb[2].replace(split_numb[2], '****'), split_numb[3])
+            split_numb = re.findall('....', split_count[2]) # делит номер счета по четыре цифры
+            split_numb[2] = '****' # изменила элемент списка
+            numb_stars = split_count[0], split_count[1], split_numb[0], split_numb[1][0:2] + '**', split_numb[2], split_numb[3]
             join_numb_stars = ' '.join(list(numb_stars))
             hide_from_list.append(join_numb_stars)
         if len(split_count) == 2:
             if len(split_count[1]) == 16:
                 split_numb = re.findall('....', split_count[1])
-                numb_stars = (split_count[0], split_numb[0], split_numb[1][0:2] + '**',
-                              split_numb[2].replace(split_numb[2], '****'), split_numb[3])
+                split_numb[2] = '****'  # изменила элемент списка
+                numb_stars = split_count[0], split_numb[0], split_numb[1][0:2] + '**', split_numb[2], split_numb[3]
                 join_numb_stars = ' '.join(list(numb_stars))
                 hide_from_list.append(join_numb_stars)
             if len(split_count[1]) == 20:
                 split_numb = re.findall('....', split_count[1])
-                numb_stars = (split_count[0], split_numb[0], split_numb[1][0:2] + '**',
-                              split_numb[2].replace(split_numb[2], '****'), split_numb[3].replace(split_numb[3], '****')
-                              , split_numb[4])
+                split_numb[2], split_numb[3] = '****', '****' # изменила элементы списка
+                numb_stars = split_count[0], split_numb[0], split_numb[1][0:2] + '**', split_numb[2], split_numb[3], split_numb[4]
                 join_numb_stars = ' '.join(list(numb_stars))
                 hide_from_list.append(join_numb_stars)
     return hide_from_list
@@ -127,8 +126,8 @@ def hide_to():
     for item in return_to():
         split_count = item.split(' ')
         split_numb = re.findall('....', split_count[1])
-        numb_stars = split_count[0], split_numb[2].replace(split_numb[2], '**') + split_numb[4]
-        join_numb_stars = ' '.join(list(numb_stars))
+        numb_stars = '**' + split_numb[4]
+        join_numb_stars = ''.join(list(numb_stars))
         hide_to_list.append(join_numb_stars)
     return hide_to_list
 
@@ -146,6 +145,6 @@ def return_name():
     """Возвращает список с информацией о валюте операции."""
     currency_list = []
     for item in sort_operations():
-        amount = item["operationAmount"]["currency"]["name"]
-        currency_list.append(amount)
+        name = item["operationAmount"]["currency"]["name"]
+        currency_list.append(name)
     return currency_list
