@@ -1,6 +1,5 @@
 import os
 import json
-import re
 import zipfile
 from config import ROOT
 from datetime import datetime
@@ -87,22 +86,16 @@ def hide_from():
             hide_from_list.append('Данные отсутствуют')
         split_count = item.split(' ')
         if len(split_count) == 3:
-            split_numb = re.findall('....', split_count[2]) # делит номер счета по четыре цифры
-            split_numb[2] = '****' # изменила элемент списка
-            numb_stars = split_count[0], split_count[1], split_numb[0], split_numb[1][0:2] + '**', split_numb[2], split_numb[3]
+            numb_stars = split_count[0], split_count[1], split_count[2][:4], split_count[2][5:7]+'**', '****', split_count[2][-4:]
             join_numb_stars = ' '.join(list(numb_stars))
             hide_from_list.append(join_numb_stars)
         if len(split_count) == 2:
             if len(split_count[1]) == 16:
-                split_numb = re.findall('....', split_count[1])
-                split_numb[2] = '****'  # изменила элемент списка
-                numb_stars = split_count[0], split_numb[0], split_numb[1][0:2] + '**', split_numb[2], split_numb[3]
+                numb_stars = split_count[0], split_count[1][:4], split_count[1][5:7] + '**', '****', split_count[1][-4:]
                 join_numb_stars = ' '.join(list(numb_stars))
                 hide_from_list.append(join_numb_stars)
             if len(split_count[1]) == 20:
-                split_numb = re.findall('....', split_count[1])
-                split_numb[2], split_numb[3] = '****', '****' # изменила элементы списка
-                numb_stars = split_count[0], split_numb[0], split_numb[1][0:2] + '**', split_numb[2], split_numb[3], split_numb[4]
+                numb_stars = split_count[0], split_count[1][:4], split_count[1][5:7] + '**', '**** ****', split_count[1][-4:]
                 join_numb_stars = ' '.join(list(numb_stars))
                 hide_from_list.append(join_numb_stars)
     return hide_from_list
@@ -125,9 +118,8 @@ def hide_to():
     hide_to_list = []
     for item in return_to():
         split_count = item.split(' ')
-        split_numb = re.findall('....', split_count[1])
-        numb_stars = '**' + split_numb[4]
-        join_numb_stars = ''.join(list(numb_stars))
+        numb_stars = split_count[0], '**' + split_count[1][-4:]
+        join_numb_stars = ' '.join(list(numb_stars))
         hide_to_list.append(join_numb_stars)
     return hide_to_list
 
